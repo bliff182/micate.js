@@ -1,0 +1,2 @@
+# micate.js
+bamazon
