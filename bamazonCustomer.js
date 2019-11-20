@@ -32,7 +32,7 @@ function start() {
     }
 
     purchase();
-    
+
   });
 }
 
@@ -42,12 +42,28 @@ function purchase() { // REMEMBER TO CONFIRM THAT THE INPUT IS VALID
     {
       name: 'id',
       type: 'input',
-      message: 'Enter the ID of the product you would like to purchase.'
+      message: 'Enter the ID of the product you would like to purchase.',
+      validate: function (value) {
+        if (isNaN(value) === false) {
+          return true;
+        }
+        return false;
+      }
     },
     {
       name: 'productAmount',
       type: 'input',
-      message: 'How many would you like to purchase?'
+      message: 'How many would you like to purchase?',
+      validate: function (value) {
+        if (isNaN(value) === false) {
+          return true;
+        } 
+        // I tried this to check if input was within the ID range. Why doesn't it work?
+        // else if (value < 1) {
+        //   return false;
+        // }
+        return false;
+      }
     }
   ]).then(function (answer) {
 
