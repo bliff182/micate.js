@@ -4,31 +4,6 @@ var Table = require('cli-table3');
 
 var addAmount;
 var stockQuantity;
-// var chosenProduct;
-
-// var table = new Table({
-//   chars: {
-//     'top': '═', 'top-mid': '╤', 'top-left': '╔', 'top-right': '╗'
-//     , 'bottom': '═', 'bottom-mid': '╧', 'bottom-left': '╚', 'bottom-right': '╝'
-//     , 'left': '║', 'left-mid': '╟', 'mid': '─', 'mid-mid': '┼'
-//     , 'right': '║', 'right-mid': '╢', 'middle': '│'
-//   }
-// });
-
-// table.push( // basic table template - remember to delete
-//   ['foo', 'bar', 'baz']
-//   , ['frob', 'bar', 'quuz']
-// );
-
-var table = new Table({ // constants for table
-  head: ['Item ID', 'Product Name', 'Department', 'Price', 'Quantity'],
-  chars: {
-    'top': '═', 'top-mid': '╤', 'top-left': '╔', 'top-right': '╗'
-    , 'bottom': '═', 'bottom-mid': '╧', 'bottom-left': '╚', 'bottom-right': '╝'
-    , 'left': '║', 'left-mid': '╟', 'mid': '─', 'mid-mid': '┼'
-    , 'right': '║', 'right-mid': '╢', 'middle': '│'
-  }
-});
 
 var connection = mysql.createConnection({
   host: 'localhost',
@@ -88,19 +63,21 @@ function viewProducts() {
   var query = 'SELECT * FROM products';
   connection.query(query, function (err, res) {
     if (err) throw err;
-    // var table = new Table({
-    //   head: ['Item ID', 'Product Name', 'Department', 'Price', 'Quantity'],
-    //   chars: {
-    //     'top': '═', 'top-mid': '╤', 'top-left': '╔', 'top-right': '╗'
-    //     , 'bottom': '═', 'bottom-mid': '╧', 'bottom-left': '╚', 'bottom-right': '╝'
-    //     , 'left': '║', 'left-mid': '╟', 'mid': '─', 'mid-mid': '┼'
-    //     , 'right': '║', 'right-mid': '╢', 'middle': '│'
-    //   }
-    // });
+    var table = new Table({
+      head: ['Item ID', 'Product Name', 'Department', 'Price', 'Quantity'],
+      chars: {
+        'top': '═', 'top-mid': '╤', 'top-left': '╔', 'top-right': '╗'
+        , 'bottom': '═', 'bottom-mid': '╧', 'bottom-left': '╚', 'bottom-right': '╝'
+        , 'left': '║', 'left-mid': '╟', 'mid': '─', 'mid-mid': '┼'
+        , 'right': '║', 'right-mid': '╢', 'middle': '│'
+      }
+    });
     for (var i = 0; i < res.length; i++) {
       table.push([res[i].item_id, res[i].product_name, res[i].department_name, res[i].price, res[i].stock_quantity]);
     }
+    console.log('\n=======================================\n');
     console.log(table.toString());
+    console.log('\n=======================================\n');
     showMenu();
   });
 }
@@ -109,10 +86,21 @@ function lowInventory() {
   var query = 'SELECT * FROM products WHERE stock_quantity < 5';
   connection.query(query, function (err, res) {
     if (err) throw err;
+    var table = new Table({
+      head: ['Item ID', 'Product Name', 'Department', 'Price', 'Quantity'],
+      chars: {
+        'top': '═', 'top-mid': '╤', 'top-left': '╔', 'top-right': '╗'
+        , 'bottom': '═', 'bottom-mid': '╧', 'bottom-left': '╚', 'bottom-right': '╝'
+        , 'left': '║', 'left-mid': '╟', 'mid': '─', 'mid-mid': '┼'
+        , 'right': '║', 'right-mid': '╢', 'middle': '│'
+      }
+    });
     for (var i = 0; i < res.length; i++) {
       table.push([res[i].item_id, res[i].product_name, res[i].department_name, res[i].price, res[i].stock_quantity]);
     }
+    console.log('\n=======================================\n');
     console.log(table.toString());
+    console.log('\n=======================================\n');
     showMenu();
   });
 }
@@ -149,12 +137,12 @@ function addInventory() {
           }
         }
       ]).then(function (answer) {
-        var query = 'SELECT stock_quantity FROM products WHERE product_name=?';
+        var query1 = 'SELECT stock_quantity FROM products WHERE product_name=?';
         var query2 = 'UPDATE products SET ? WHERE ?';
         // chosenProduct = answer.product;
         addAmount = parseInt(answer.addAmount);
 
-        connection.query(query, answer.product, function (err, res) {
+        connection.query(query1, answer.product, function (err, res) {
           if (err) throw err;
           stockQuantity = res[0].stock_quantity;
           // var newQuantity = stockQuantity + addAmount; 
@@ -169,10 +157,70 @@ function addInventory() {
             ],
             function (err, res) {
               if (err) throw err;
+              console.log('\n=======================================\n');
               console.log('Inventory updated.');
+              console.log('\n=======================================\n');
               showMenu();
             });
         });
       });
+  });
+}
+
+function addProduct() {
+  connection.query('SELECT * FROM products', function(err, res) {
+    if (err) throw err;
+    inquirer
+    .prompt([
+      {
+        name: 'product',
+        type: 'input',
+        message: 'Enter the name of product you are adding.'
+      },
+      {
+        name: 'department',
+        type: 'input',
+        message: 'Enter the the department category for this product.'
+      },
+      {
+        name: 'price',
+        type: 'number',
+        message: 'Enter the price at which to list the product.',
+        validate: function (value) {
+          if (isNaN(value) === false) {
+            return true;
+          }
+          return false;
+        }
+      },
+      {
+        name: 'quantity',
+        type: 'number',
+        message: 'Enter the unit quantity being added.',
+        validate: function (value) {
+          if (isNaN(value) === false) {
+            return true;
+          }
+          return false;
+        }
+      }
+    ]).then(function (answer) {
+      connection.query(
+        'INSERT INTO products SET ?',
+        {
+          product_name: answer.product,
+          department_name: answer.department,
+          price: parseFloat(answer.price),
+          stock_quantity: parseInt(answer.quantity)
+        },
+        function(err) {
+          if (err) throw err;
+          console.log('\n=======================================\n');
+          console.log('Item added to Bamazon Database!');
+          console.log('\n=======================================\n');
+          showMenu();
+        }
+      );
+    });
   });
 }
