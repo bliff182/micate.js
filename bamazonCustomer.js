@@ -84,7 +84,7 @@ function purchase() { // REMEMBER TO CONFIRM THAT THE INPUT IS VALID
       // console.log(res[0].item_id); // ID OF CHOSEN PRODUCT
 
       if (purchaseQuantity > stockQuantity) {
-        console.log('Unfortunately we have insufficient quantity of your selected product. Your order can not be completed.');
+        console.log('Unfortunately we have insufficient quantity of your selected product. Your order could not be completed.');
         console.log('\n=====================================\n');
         connection.end();
       }
