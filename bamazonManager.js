@@ -16,7 +16,15 @@ var Table = require('cli-table3');
 //   , ['frob', 'bar', 'quuz']
 // );
 
-// console.log(table.toString());
+var table = new Table({ // constants for table
+  head: ['Item ID', 'Product Name', 'Department', 'Price', 'Quantity'],
+  chars: {
+    'top': '═', 'top-mid': '╤', 'top-left': '╔', 'top-right': '╗'
+    , 'bottom': '═', 'bottom-mid': '╧', 'bottom-left': '╚', 'bottom-right': '╝'
+    , 'left': '║', 'left-mid': '╟', 'mid': '─', 'mid-mid': '┼'
+    , 'right': '║', 'right-mid': '╢', 'middle': '│'
+  }
+});
 
 var connection = mysql.createConnection({
   host: 'localhost',
@@ -76,22 +84,31 @@ function viewProducts() {
   var query = 'SELECT * FROM products';
   connection.query(query, function (err, res) {
     if (err) throw err;
-
-    var table = new Table({
-      head: ['Item ID', 'Product Name', 'Department', 'Price', 'Quantity'],
-      chars: {
-        'top': '═', 'top-mid': '╤', 'top-left': '╔', 'top-right': '╗'
-        , 'bottom': '═', 'bottom-mid': '╧', 'bottom-left': '╚', 'bottom-right': '╝'
-        , 'left': '║', 'left-mid': '╟', 'mid': '─', 'mid-mid': '┼'
-        , 'right': '║', 'right-mid': '╢', 'middle': '│'
-      }
-    });
-
+    // var table = new Table({
+    //   head: ['Item ID', 'Product Name', 'Department', 'Price', 'Quantity'],
+    //   chars: {
+    //     'top': '═', 'top-mid': '╤', 'top-left': '╔', 'top-right': '╗'
+    //     , 'bottom': '═', 'bottom-mid': '╧', 'bottom-left': '╚', 'bottom-right': '╝'
+    //     , 'left': '║', 'left-mid': '╟', 'mid': '─', 'mid-mid': '┼'
+    //     , 'right': '║', 'right-mid': '╢', 'middle': '│'
+    //   }
+    // });
     for (var i = 0; i < res.length; i++) {
       table.push([res[i].item_id, res[i].product_name, res[i].department_name, res[i].price, res[i].stock_quantity]);
     }
-
     console.log(table.toString());
+    showMenu();
+  });
+}
 
+function lowInventory() {
+  var query = 'SELECT * FROM products WHERE stock_quantity < 5';
+  connection.query(query, function(err, res) {
+    if (err) throw err;
+    for (var i = 0; i < res.length; i++) {
+      table.push([res[i].item_id, res[i].product_name, res[i].department_name, res[i].price, res[i].stock_quantity]);
+    }
+    console.log(table.toString());
+    showMenu();
   });
 }
