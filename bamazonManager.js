@@ -15,7 +15,6 @@ var connection = mysql.createConnection({
 
 connection.connect(function (err) {
   if (err) throw err;
-  // attempting ES6
   console.log(`connected as id ${connection.threadId}`);
   showMenu();
 });
@@ -73,7 +72,7 @@ function viewProducts() {
       }
     });
     for (var i = 0; i < res.length; i++) {
-      table.push([res[i].item_id, res[i].product_name, res[i].department_name, res[i].price, res[i].stock_quantity]);
+      table.push([res[i].item_id, res[i].product_name, res[i].department_name, '$' + res[i].price, res[i].stock_quantity]);
     }
     console.log('\n=======================================\n');
     console.log(table.toString());
@@ -96,7 +95,7 @@ function lowInventory() {
       }
     });
     for (var i = 0; i < res.length; i++) {
-      table.push([res[i].item_id, res[i].product_name, res[i].department_name, res[i].price, res[i].stock_quantity]);
+      table.push([res[i].item_id, res[i].product_name, res[i].department_name, '$' + res[i].price, res[i].stock_quantity]);
     }
     console.log('\n=======================================\n');
     console.log(table.toString());
@@ -168,9 +167,7 @@ function addInventory() {
 }
 
 function addProduct() {
-  connection.query('SELECT * FROM products', function(err, res) {
-    if (err) throw err;
-    inquirer
+  inquirer
     .prompt([
       {
         name: 'product',
@@ -213,7 +210,7 @@ function addProduct() {
           price: parseFloat(answer.price),
           stock_quantity: parseInt(answer.quantity)
         },
-        function(err) {
+        function (err) {
           if (err) throw err;
           console.log('\n=======================================\n');
           console.log('Item added to Bamazon Database!');
@@ -222,5 +219,4 @@ function addProduct() {
         }
       );
     });
-  });
 }
