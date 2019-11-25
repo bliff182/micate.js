@@ -7,7 +7,7 @@ Bamazon is a Node-based CLI storefront app that takes in orders from customers u
 ## How Bamazon Works
 
 Since Bamazon is intended for use with Node.js, you must first clone this repository to your computer. Once that is done:
-1. Open yourr preferred terminal program.
+1. Open your preferred terminal program.
 2. Navigate to the folder containing the repository files.
 3. Run `npm install` to install the necessary dependencies. 
 
