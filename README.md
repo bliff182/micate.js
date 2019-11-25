@@ -41,7 +41,7 @@ When the user runs `node bamazonManager.js`, the app presents a list of actions 
 ![BM_inv-updated](/screenshots/BM_inv-updated.png)
 
 4. `Add New Product`: The manager can add a brand new product to the database. The app will prompt for the necessary information; the product name, department, price, and quantity in stock, and update the database accordingly.
-![BM_new-product](homework/week-10/micate.js/screenshots/BM_new-product.png)
+![BM_new-product](/screenshots/BM_new-product.png)
 
 
 ## Technologies Used
