@@ -48,3 +48,5 @@ When the user runs `node bamazonManager.js`, the app presents a list of actions 
 - [MySQL](https://www.npmjs.com/package/mysql)
 - [Inquirer](https://www.npmjs.com/package/inquirer)
 - [CLI Table](https://www.npmjs.com/package/cli-table3)
+
+**Created by Mike Bither**
