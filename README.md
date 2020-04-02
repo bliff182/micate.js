@@ -1,4 +1,4 @@
-# micate.js - Bamazon
+# Bamazon
 
 Bamazon is a Node-based CLI storefront app that takes in orders from customers using a series of prompts and updates its database accordingly. Additionally, there is a Manager option that allows for additional database manipulation, including viewing products with low inventory, restocking units, and adding new products for sale on the customer side.
 
